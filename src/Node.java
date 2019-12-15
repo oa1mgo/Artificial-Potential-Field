@@ -6,8 +6,10 @@
  **/
 
 public class Node {
-    public static int BLOCK = 1;
-    public static int UNBLOCK = 0;
+    public static int UNBLOCK_NODE = 0;
+    public static int BLOCK_NODE = 1;
+    public static int INITIAL_NODE = 2;
+    public static int FINAL_NODE = 3;
 
     public int x;
     public int y;
