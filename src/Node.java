@@ -32,7 +32,7 @@ public class Node {
             return false;
         }
         Node node = (Node) obj;
-        return node.col == col && node.row == row && node.state == state;
+        return node.col == col && node.row == row;
     }
 
     public int getCol() {
