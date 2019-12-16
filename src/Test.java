@@ -10,5 +10,9 @@ import java.rmi.MarshalledObject;
 public class Test {
     public static void main(String[] args) {
         Map mMap = new Map();
+        double a = 3;
+        double b =2;
+        System.out.println(a/b);
     }
+
 }
