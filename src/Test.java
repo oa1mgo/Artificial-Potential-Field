@@ -1,3 +1,5 @@
+import java.rmi.MarshalledObject;
+
 /**
  * @program: Artificial-Potential-Field-master
  * @description: Main
@@ -7,6 +9,6 @@
 
 public class Test {
     public static void main(String[] args) {
-
+        Map mMap = new Map();
     }
 }

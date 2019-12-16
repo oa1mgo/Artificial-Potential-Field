@@ -7,6 +7,25 @@ import java.util.List;
  * @create: 2019-12-15 23:57
  **/
 
+/**
+ * I: initial node
+ * F: final node
+ * x: block node
+ * 0: unblock node
+ * <p>
+ * default map:
+ * 0   0   0   0   0   0   0   0   0   F
+ * 0   0   x   0   0   0   0   0   0   0
+ * 0   0   0   0   0   0   0   x   0   0
+ * 0   0   0   0   0   0   0   0   0   0
+ * 0   x   0   0   x   0   0   0   0   0
+ * 0   0   0   0   0   0   0   0   0   0
+ * 0   0   0   0   0   0   0   0   x   0
+ * 0   x   0   0   0   0   0   0   0   0
+ * 0   0   0   0   0   x   0   0   0   0
+ * I   0   0   0   0   0   0   0   0   0
+ **/
+
 public class Map {
     public static int DEFAULT_ROW = 10;
     public static int DEFAULT_COL = 10;
@@ -27,24 +46,7 @@ public class Map {
         buildMap(initialNode, finalNode, blockList);
     }
 
-    /**
-     * I: initial node
-     * F: final node
-     * x: block node
-     * 0: unblock node
-     * <p>
-     * default map:
-     * 0   0   0   0   0   0   0   0   0   F
-     * 0   0   x   0   0   0   0   0   0   0
-     * 0   0   0   0   0   0   0   x   0   0
-     * 0   0   0   0   0   0   0   0   0   0
-     * 0   x   0   0   x   0   0   0   0   0
-     * 0   0   0   0   0   0   0   0   0   0
-     * 0   0   0   0   0   0   0   0   x   0
-     * 0   x   0   0   0   0   0   0   0   0
-     * 0   0   0   0   0   x   0   0   0   0
-     * I   0   0   0   0   0   0   0   0   0
-     **/
+
 
     public int row;
     public int col;
