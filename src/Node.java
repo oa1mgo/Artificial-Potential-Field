@@ -11,19 +11,19 @@ public class Node {
     public static int INITIAL_NODE = 2;
     public static int FINAL_NODE = 3;
 
-    public int x;
-    public int y;
+    public int col;
+    public int row;
     public int state;
 
-    public Node(int x, int y, int state) {
-        this.x = x;
-        this.y = y;
+    public Node(int col, int row, int state) {
+        this.col = col;
+        this.row = row;
         this.state = state;
     }
 
     @Override
     public String toString() {
-        return "Node: " + "[" + x + "," + y + "], state = " + state;
+        return "Node: " + "[" + col + "," + row + "], state = " + state;
     }
 
     @Override
@@ -32,6 +32,30 @@ public class Node {
             return false;
         }
         Node node = (Node) obj;
-        return node.x == x && node.y == y && node.state == state;
+        return node.col == col && node.row == row && node.state == state;
+    }
+
+    public int getCol() {
+        return col;
+    }
+
+    public int getRow() {
+        return row;
+    }
+
+    public int getState() {
+        return state;
+    }
+
+    public void setCol(int col) {
+        this.col = col;
+    }
+
+    public void setRow(int row) {
+        this.row = row;
+    }
+
+    public void setState(int state) {
+        this.state = state;
     }
 }
