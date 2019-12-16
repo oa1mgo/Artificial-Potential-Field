@@ -68,8 +68,8 @@ public class Map {
         }
 
         //set block nodes
-        for(int i=0;i<blockList.length;i++) {
-            mapArea[blockList[i][0]][blockList[i][1]].setState(Node.BLOCK_NODE);
+        for (int[] blocks : blockList) {
+            mapArea[blocks[0]][blocks[1]].setState(Node.BLOCK_NODE);
         }
 
         //set initial and final node
