@@ -12,7 +12,7 @@ public class Map {
     public static int DEFAULT_COL = 10;
     public static Node DEFAULT_INITIAL_NODE = new Node(9, 0, 2);
     public static Node DEFAULT_FINAL_NODE = new Node(0, 9, 3);
-    public static int[][] DEFAULT_BLOCK_LIST = new int[][]{{2, 3}, {3, 7}, {4, 1}, {4, 4}, {6, 8}, {7, 1}, {8, 5}};
+    public static int[][] DEFAULT_BLOCK_LIST = new int[][]{{1, 2}, {2, 7}, {4, 1}, {4, 4}, {6, 8}, {7, 1}, {8, 5}};
     public List<Node> BlockList;
 
     public Map() {
@@ -57,15 +57,21 @@ public class Map {
         this.initialNode = initialNode;
         this.finalNode = finalNode;
         this.blockList = blockList;
-        for (int i = 0; i < mapArea.length - 1; i++) {
+
+        //set all all nodes unblocked
+        for (int i = 0; i < mapArea.length ; i++) {
             for (int j = 0; j < mapArea[0].length; j++) {
                 mapArea[i][j] = new Node(col, row, 0);
             }
         }
 
-        //TODO: set block node
+        //set block nodes
         for(int i=0;i<blockList.length;i++) {
-
+            mapArea[blockList[i][0]][blockList[i][1]].setState(Node.BLOCK_NODE);
         }
+
+        //set initial and final node
+        mapArea[initialNode.getCol()][initialNode.getRow()].setState(Node.INITIAL_NODE);
+        mapArea[finalNode.getCol()][finalNode.getRow()].setState(Node.FINAL_NODE);
     }
 }
