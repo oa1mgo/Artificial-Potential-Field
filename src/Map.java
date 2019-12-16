@@ -16,16 +16,15 @@ public class Map {
     public List<Node> BlockList;
 
     public Map() {
+        this.mapArea = new Node[DEFAULT_ROW][DEFAULT_COL];
         buildMap(DEFAULT_INITIAL_NODE, DEFAULT_FINAL_NODE, DEFAULT_BLOCK_LIST);
     }
 
     public Map(int row, int col, Node initialNode, Node finalNode, int[][] blockList) {
         this.row = row;
         this.col = col;
-        this.initialNode = initialNode;
-        this.finalNode = finalNode;
-        this.blockList = blockList;
-        buildMap(this.initialNode, this.finalNode, this.blockList);
+        this.mapArea = new Node[this.row][this.col];
+        buildMap(initialNode, finalNode, blockList);
     }
 
     /**
@@ -52,8 +51,21 @@ public class Map {
     public Node initialNode;
     public Node finalNode;
     public int[][] blockList;
+    private Node[][] mapArea;
 
     protected void buildMap(Node initialNode, Node finalNode, int[][] blockList) {
+        this.initialNode = initialNode;
+        this.finalNode = finalNode;
+        this.blockList = blockList;
+        for (int i = 0; i < mapArea.length - 1; i++) {
+            for (int j = 0; j < mapArea[0].length; j++) {
+                mapArea[i][j] = new Node(col, row, 0);
+            }
+        }
 
+        //TODO: set block node
+        for(int i=0;i<blockList.length;i++) {
+
+        }
     }
 }
