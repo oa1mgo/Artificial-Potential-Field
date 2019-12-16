@@ -12,7 +12,9 @@ public class Test {
         Map mMap = new Map();
         double a = 3;
         double b =2;
-        System.out.println(a/b);
+//        System.out.println(a/b);
+
     }
+
 
 }
