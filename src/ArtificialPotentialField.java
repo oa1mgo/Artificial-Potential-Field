@@ -39,16 +39,18 @@ public class ArtificialPotentialField {
          * 4.移动一步
          * 5.跳到步骤2
          * */
-
         Node currentNode = initialNode;
         int[][] obstacleList = mMap.blockList;
         int obstacleListSize = obstacleList.length;
+        int stepDirection = -1;
         while (currentNode != finalNode || iteration < 100) {
             for (int i = 0; i < obstacleListSize; i++) {
                 Node node = mapArea[obstacleList[i][0]][obstacleList[i][1]];
                 addForce(currentNode, node, node.getState(), force);
-
             }
+            stepDirection = calculateStepDirection(force.getDirection());
+            //TODO: move current node.
+
         }
 
 
@@ -56,11 +58,34 @@ public class ArtificialPotentialField {
         return null;
     }
 
+    private int calculateStepDirection(double dir) {
+        int stepDirection = -1;
+        if(dir<=Math.PI/8) {
+            stepDirection = 0;
+        } else if (dir<=Math.PI*3/8){
+            stepDirection = 1;
+        } else if (dir<=Math.PI*5/8){
+            stepDirection = 2;
+        } else if (dir<=Math.PI*7/8){
+            stepDirection = 3;
+        } else if (dir<=Math.PI*9/8){
+            stepDirection = 4;
+        } else if (dir<=Math.PI*11/8){
+            stepDirection = 5;
+        } else if (dir<=Math.PI*13/8){
+            stepDirection = 6;
+        } else if (dir<=Math.PI*15/8){
+            stepDirection = 7;
+        } else  {
+            stepDirection = 0;
+        }
+        return stepDirection;
+    }
+
 
     class Force {
         private double resultantForceX;
         private double resultantForceY;
-
         private double direction;
         private double size;
 
@@ -105,14 +130,17 @@ public class ArtificialPotentialField {
     }
 
     private void addForce(Node currentNode, Node node, int state, Force force) {
-        double squDistance = Math.pow(currentNode.getCol() - node.getCol(), 2) + Math.pow(currentNode.getRow() - node.getRow(), 2);
         int index = state == 1 ? -1 : 1;    //BLOCK_NODE = 1  FINAL_NODE = 3
         double coefficient = state == 1 ? REPULSION_COEFFICIENT : ATTRACTION_COEFFICIENT;
+        double squDistance = Math.pow(currentNode.getCol() - node.getCol(), 2) + Math.pow(currentNode.getRow() - node.getRow(), 2);
         double dir = Math.atan2(currentNode.getCol() - node.getCol(), currentNode.getRow() - node.getRow());
         double direction = state == 1 ? dir : dir + Math.PI;
         double forceSize = coefficient * Math.pow(squDistance, index);
+
         force.setResultantForceX(force.getResultantForceX()+forceSize*Math.cos(direction));
         force.setResultantForceY(force.getResultantForceY()+forceSize*Math.sin(direction));
+        force.setSize(force.getSize()+forceSize);
+        force.setDirection(Math.atan2(force.getResultantForceY(),force.getResultantForceX()));
     }
 
 
