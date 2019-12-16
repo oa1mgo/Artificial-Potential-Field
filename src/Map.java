@@ -53,7 +53,7 @@ public class Map {
     public Node initialNode;
     public Node finalNode;
     public int[][] blockList;
-    private Node[][] mapArea;
+    public Node[][] mapArea;
 
     protected void buildMap(Node initialNode, Node finalNode, int[][] blockList) {
         this.initialNode = initialNode;
