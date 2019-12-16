@@ -1,4 +1,3 @@
-import java.text.DecimalFormat;
 import java.util.List;
 
 /**
@@ -47,7 +46,7 @@ public class ArtificialPotentialField {
         while (currentNode != finalNode || iteration < 100) {
             for (int i = 0; i < obstacleListSize; i++) {
                 Node node = mapArea[obstacleList[i][0]][obstacleList[i][1]];
-                calculateResultantForce(currentNode, node, node.getState(), force);
+                addForce(currentNode, node, node.getState(), force);
 
             }
         }
@@ -59,11 +58,11 @@ public class ArtificialPotentialField {
 
 
     class Force {
-        public double resultantForceX;
-        public double resultantForceY;
+        private double resultantForceX;
+        private double resultantForceY;
 
-        public double direction;
-        public double size;
+        private double direction;
+        private double size;
 
         public double getDirection() {
             return direction;
@@ -82,17 +81,10 @@ public class ArtificialPotentialField {
         }
 
         public Force(double x, double y) {
-            this.resultantForceX = x;
-            this.resultantForceY = y;
-
-        }
-
-        private void calculateForce(double x, double y) {
-            if (x == 0) {
-                setDirection(y > 0 ? Math.PI / 2 : Math.PI * 3 / 2);
-            }
+            setResultantForceX(x);
+            setResultantForceY(y);
             setSize(Math.sqrt(Math.pow(x, 2) + Math.pow(y, 2)));
-
+            setDirection(Math.atan2(y, x));
         }
 
         public double getResultantForceX() {
@@ -112,27 +104,16 @@ public class ArtificialPotentialField {
         }
     }
 
-    private void calculateResultantForce(Node currentNode, Node node, int state, Force force) {
-//        force.setResultantForceX(force.getResultantForceX()+calculateResultantForceX(currentNode, node, node.getState()));
-//        force.setResultantForceY(force.getResultantForceY()+calculateResultantForceY(currentNode, node, node.getState()));
-        double squDistance = calculateSquareDistance(currentNode, node);
+    private void addForce(Node currentNode, Node node, int state, Force force) {
+        double squDistance = Math.pow(currentNode.getCol() - node.getCol(), 2) + Math.pow(currentNode.getRow() - node.getRow(), 2);
         int index = state == 1 ? -1 : 1;    //BLOCK_NODE = 1  FINAL_NODE = 3
         double coefficient = state == 1 ? REPULSION_COEFFICIENT : ATTRACTION_COEFFICIENT;
-
+        double dir = Math.atan2(currentNode.getCol() - node.getCol(), currentNode.getRow() - node.getRow());
+        double direction = state == 1 ? dir : dir + Math.PI;
+        double forceSize = coefficient * Math.pow(squDistance, index);
+        force.setResultantForceX(force.getResultantForceX()+forceSize*Math.cos(direction));
+        force.setResultantForceY(force.getResultantForceY()+forceSize*Math.sin(direction));
     }
 
-    private double calculateResultantForceX(Node currentNode, Node node, int nodeState) {
-        double squDistance = calculateSquareDistance(currentNode, node);
-        return 0;
-    }
 
-
-    private double calculateResultantForceY(Node currentNode, Node node, int nodeState) {
-        double squDistance = calculateSquareDistance(currentNode, node);
-        return 0;
-    }
-
-    private double calculateSquareDistance(Node currentNode, Node node) {
-        return Math.pow(currentNode.getCol() - node.getCol(), 2) + Math.pow(currentNode.getRow() - node.getRow(), 2);
-    }
 }
