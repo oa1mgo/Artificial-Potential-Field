@@ -31,7 +31,7 @@ public class Map {
     public static int DEFAULT_COL = 10;
     public static Node DEFAULT_INITIAL_NODE = new Node(9, 0, 2);
     public static Node DEFAULT_FINAL_NODE = new Node(0, 9, 3);
-    public static int[][] DEFAULT_BLOCK_LIST = new int[][]{{1, 2}, {2, 7}, {4, 1}, {4, 4}, {6, 8}, {7, 1}, {8, 5}};
+    public static int[][] DEFAULT_BLOCK_LIST = new int[][]{{1, 2}, {2,7}, {4, 1}, {4, 4}, {6, 8}, {7, 1}, {8, 5}};
     public List<Node> BlockList;
 
     public Map() {
@@ -63,7 +63,7 @@ public class Map {
         //set all all nodes unblocked
         for (int i = 0; i < mapArea.length ; i++) {
             for (int j = 0; j < mapArea[0].length; j++) {
-                mapArea[i][j] = new Node(col, row, 0);
+                mapArea[i][j] = new Node(i, j, 0);
             }
         }
 
