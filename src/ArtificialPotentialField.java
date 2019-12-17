@@ -1,3 +1,4 @@
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -9,17 +10,18 @@ import java.util.List;
 
 public class ArtificialPotentialField {
     private Map mMap;
-    Node initialNode;
-    Node finalNode;
-    Node[][] mapArea;
+    private Node initialNode;
+    private Node finalNode;
+    private Node[][] mapArea;
+    private int mapCol;
+    private int mapRow;
+    private int iteration = 0;
+    private int maxIteration = 30;
+    private int stepLength = 1;
+    private static double ATTRACTION_COEFFICIENT = 10.0;
+    private static double REPULSION_COEFFICIENT = 0.2;
 
-
-    public int iteration = 0;
-    public int stepLength = 1;
-    public static double ATTRACTION_COEFFICIENT = 1.0;
-    public static double REPULSION_COEFFICIENT = 4.0;
-
-    private Force force = new Force(0, 0);
+    private ArrayList<Node> nodeList = new ArrayList<Node>();
 
     public ArtificialPotentialField(Map mMap) {
         if (mMap != null) {
@@ -27,56 +29,145 @@ public class ArtificialPotentialField {
             this.initialNode = mMap.initialNode;
             this.finalNode = mMap.finalNode;
             this.mapArea = mMap.mapArea;
+            this.mapCol = mapArea[0].length;
+            this.mapRow = mapArea.length;
+            this.nodeList.add(initialNode);
         }
     }
 
-    public List<Node> findPath() {
+    public ArrayList<Node> findPath() {
         //TODO: 算法主体
         /***
-         * 1.搜索规定区域内的障碍物和终点
+         * 1.搜索规定区域内的障碍物和终点，记录当前点
          * 2.判断是否到达终点或迭代次数超过规定值
          * 3.计算合力的方向
-         * 4.移动一步
+         * 4.移动一步，迭代次数加一
          * 5.跳到步骤2
          * */
         Node currentNode = initialNode;
         int[][] obstacleList = mMap.blockList;
         int obstacleListSize = obstacleList.length;
         int stepDirection = -1;
-        while (currentNode != finalNode || iteration < 100) {
-            for (int i = 0; i < obstacleListSize; i++) {
-                Node node = mapArea[obstacleList[i][0]][obstacleList[i][1]];
+        while (!currentNode.equals(finalNode) && iteration <= maxIteration) {
+            Force force = new Force(0, 0);
+            nodeList.add(currentNode);
+            addForce(currentNode, finalNode, finalNode.getState(), force);
+            for (int[] obstacle : obstacleList) {
+                Node node = mapArea[obstacle[0]][obstacle[1]];
                 addForce(currentNode, node, node.getState(), force);
             }
             stepDirection = calculateStepDirection(force.getDirection());
+            System.out.println(currentNode + "," + stepDirection);
             //TODO: move current node.
-
+            currentNode = moveCurrentNode(currentNode, stepDirection);
+            iteration++;
         }
+        return nodeList;
+    }
 
-
-        //TODO: return node list
-        return null;
+    private Node moveCurrentNode(Node currentNode, int stepDirection) {
+        int col = currentNode.getCol();
+        int row = currentNode.getRow();
+        Node nextNode = currentNode;
+        switch (stepDirection) {
+            case 0:     //east
+                if (row + 1 < mapRow) {
+                    nextNode = mapArea[col][row + 1];
+                } else {
+                    System.out.println("Cannot move current node, direction:" + stepDirection);
+                }
+                break;
+            case 1:     //north- east
+                if (col - 1 >= 0 && row + 1 < mapRow) {
+                    nextNode = mapArea[col - 1][row + 1];
+                } else if (col - 1 < 0 && row + 1 < mapRow) {
+                    nextNode = mapArea[col][row + 1];
+                } else if (col - 1 >= 0 && row + 1 >= mapRow) {
+                    nextNode = mapArea[col - 1][row];
+                } else {
+                    System.out.println("Something wrong happened when move node, direction:" + stepDirection);
+                }
+                break;
+            case 2:     //north
+                if (col - 1 >= 0) {
+                    nextNode = mapArea[col - 1][row];
+                    nextNode = mapArea[col - 1][row];
+                } else {
+                    System.out.println("Cannot move current node, direction:" + stepDirection);
+                }
+                break;
+            case 3:     //north-west
+                if (col - 1 >= 0 && row - 1 >= 0) {
+                    nextNode = mapArea[col - 1][row - 1];
+                } else if (col - 1 < 0 && row - 1 >= 0) {
+                    nextNode = mapArea[col][row - 1];
+                } else if (col - 1 >= 0 && row - 1 < 0) {
+                    nextNode = mapArea[col - 1][row];
+                } else {
+                    System.out.println("Something wrong happened when move node, direction:" + stepDirection);
+                }
+                break;
+            case 4:     //west
+                if (row - 1 >= 0) {
+                    nextNode = mapArea[col][row - 1];
+                } else {
+                    System.out.println("Cannot move current node, direction:" + stepDirection);
+                }
+                break;
+            case 5:     //south-west
+                if (col + 1 < mapCol && row - 1 >= 0) {
+                    nextNode = mapArea[col + 1][row - 1];
+                } else if (col + 1 >= mapCol && row - 1 >= 0) {
+                    nextNode = mapArea[col][row - 1];
+                } else if (col + 1 < mapCol && row - 1 < 0) {
+                    nextNode = mapArea[col + 1][row];
+                } else {
+                    System.out.println("Something wrong happened when move node, direction:" + stepDirection);
+                }
+                break;
+            case 6:     //south
+                if (col + 1 < mapCol) {
+                    nextNode = mapArea[col + 1][row];
+                } else {
+                    System.out.println("Cannot move current node!!! direction:" + stepDirection);
+                }
+                break;
+            case 7:     //south-east
+                if (col + 1 < mapCol && row + 1 < mapRow) {
+                    nextNode = mapArea[col + 1][row + 1];
+                } else if (col + 1 > mapCol && row + 1 < mapRow) {
+                    nextNode = mapArea[col][row + 1];
+                } else if (col + 1 < mapCol && row + 1 > mapRow) {
+                    nextNode = mapArea[col + 1][row];
+                } else {
+                    System.out.println("Something wrong happened when move node, direction:" + stepDirection);
+                }
+                break;
+            default:    //default
+                break;
+        }
+        return nextNode;
     }
 
     private int calculateStepDirection(double dir) {
         int stepDirection = -1;
-        if(dir<=Math.PI/8) {
+        if (dir <= Math.PI / 8) {
             stepDirection = 0;
-        } else if (dir<=Math.PI*3/8){
+        } else if (dir <= Math.PI * 3 / 8) {
             stepDirection = 1;
-        } else if (dir<=Math.PI*5/8){
+        } else if (dir <= Math.PI * 5 / 8) {
             stepDirection = 2;
-        } else if (dir<=Math.PI*7/8){
+        } else if (dir <= Math.PI * 7 / 8) {
             stepDirection = 3;
-        } else if (dir<=Math.PI*9/8){
+        } else if (dir <= Math.PI * 9 / 8) {
             stepDirection = 4;
-        } else if (dir<=Math.PI*11/8){
+        } else if (dir <= Math.PI * 11 / 8) {
             stepDirection = 5;
-        } else if (dir<=Math.PI*13/8){
+        } else if (dir <= Math.PI * 13 / 8) {
             stepDirection = 6;
-        } else if (dir<=Math.PI*15/8){
+        } else if (dir <= Math.PI * 15 / 8) {
             stepDirection = 7;
-        } else  {
+        } else {
             stepDirection = 0;
         }
         return stepDirection;
@@ -107,9 +198,9 @@ public class ArtificialPotentialField {
 
         public Force(double x, double y) {
             setResultantForceX(x);
-            setResultantForceY(y);
+            setResultantForceY(-y);
             setSize(Math.sqrt(Math.pow(x, 2) + Math.pow(y, 2)));
-            setDirection(Math.atan2(y, x));
+            setDirection(Math.atan2(-y, x));
         }
 
         public double getResultantForceX() {
@@ -130,17 +221,17 @@ public class ArtificialPotentialField {
     }
 
     private void addForce(Node currentNode, Node node, int state, Force force) {
-        int index = state == 1 ? -1 : 1;    //BLOCK_NODE = 1  FINAL_NODE = 3
+//        int index = state == 1 ? -1 : 1;    //BLOCK_NODE = 1  FINAL_NODE = 3
         double coefficient = state == 1 ? REPULSION_COEFFICIENT : ATTRACTION_COEFFICIENT;
         double squDistance = Math.pow(currentNode.getCol() - node.getCol(), 2) + Math.pow(currentNode.getRow() - node.getRow(), 2);
-        double dir = Math.atan2(currentNode.getCol() - node.getCol(), currentNode.getRow() - node.getRow());
+        double dir = Math.atan2(-(currentNode.getCol() - node.getCol()), currentNode.getRow() - node.getRow());
         double direction = state == 1 ? dir : dir + Math.PI;
-        double forceSize = coefficient * Math.pow(squDistance, index);
+        double forceSize = coefficient * Math.pow(squDistance, -1);
 
-        force.setResultantForceX(force.getResultantForceX()+forceSize*Math.cos(direction));
-        force.setResultantForceY(force.getResultantForceY()+forceSize*Math.sin(direction));
-        force.setSize(force.getSize()+forceSize);
-        force.setDirection(Math.atan2(force.getResultantForceY(),force.getResultantForceX()));
+        force.setResultantForceX(force.getResultantForceX() + forceSize * Math.cos(direction));
+        force.setResultantForceY(force.getResultantForceY() + forceSize * Math.sin(direction));
+        force.setSize(force.getSize() + forceSize);
+        force.setDirection(Math.atan2(force.getResultantForceY(), force.getResultantForceX()));
     }
 
 
