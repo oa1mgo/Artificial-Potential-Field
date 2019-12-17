@@ -1,4 +1,6 @@
 import java.rmi.MarshalledObject;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * @program: Artificial-Potential-Field-master
@@ -10,9 +12,9 @@ import java.rmi.MarshalledObject;
 public class Test {
     public static void main(String[] args) {
         Map mMap = new Map();
-        double a = 3;
-        double b =2;
-//        System.out.println(a/b);
+        ArtificialPotentialField artificialPotentialField = new ArtificialPotentialField(mMap);
+        ArrayList<Node> nodeList = (ArrayList<Node>) artificialPotentialField.findPath();
+
 
     }
 
