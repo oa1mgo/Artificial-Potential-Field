@@ -16,10 +16,10 @@ public class ArtificialPotentialField {
     private int mapCol;
     private int mapRow;
     private int iteration = 0;
-    private int maxIteration = 30;
+    private int maxIteration = 100;
     private int stepLength = 1;
-    private static double ATTRACTION_COEFFICIENT = 10.0;
-    private static double REPULSION_COEFFICIENT = 0.2;
+    private static double ATTRACTION_COEFFICIENT = 0.5;
+    private static double REPULSION_COEFFICIENT = 20.0;
 
     private ArrayList<Node> nodeList = new ArrayList<Node>();
 
@@ -57,7 +57,8 @@ public class ArtificialPotentialField {
                 addForce(currentNode, node, node.getState(), force);
             }
             stepDirection = calculateStepDirection(force.getDirection());
-            System.out.println(currentNode + "," + stepDirection);
+//            System.out.println(currentNode + ", direction:" + stepDirection+", Force:"+force.getSize()+","+force.getDirection()*180/Math.PI);
+            System.out.println(currentNode.getCol()+"   "+currentNode.getRow());
             //TODO: move current node.
             currentNode = moveCurrentNode(currentNode, stepDirection);
             iteration++;
@@ -221,12 +222,12 @@ public class ArtificialPotentialField {
     }
 
     private void addForce(Node currentNode, Node node, int state, Force force) {
-//        int index = state == 1 ? -1 : 1;    //BLOCK_NODE = 1  FINAL_NODE = 3
+        int index = state == 1 ? -1 : 1;    //BLOCK_NODE = 1  FINAL_NODE = 3
         double coefficient = state == 1 ? REPULSION_COEFFICIENT : ATTRACTION_COEFFICIENT;
         double squDistance = Math.pow(currentNode.getCol() - node.getCol(), 2) + Math.pow(currentNode.getRow() - node.getRow(), 2);
         double dir = Math.atan2(-(currentNode.getCol() - node.getCol()), currentNode.getRow() - node.getRow());
         double direction = state == 1 ? dir : dir + Math.PI;
-        double forceSize = coefficient * Math.pow(squDistance, -1);
+        double forceSize = coefficient * Math.pow(squDistance, index);
 
         force.setResultantForceX(force.getResultantForceX() + forceSize * Math.cos(direction));
         force.setResultantForceY(force.getResultantForceY() + forceSize * Math.sin(direction));

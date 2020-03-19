@@ -1,11 +1,6 @@
 import java.util.List;
 
-/**
- * @program: Artificial-Potential-Field-master
- * @description: construct a map
- * @author: Miao Jiaxin
- * @create: 2019-12-15 23:57
- **/
+
 
 /**
  * I: initial node
@@ -26,13 +21,19 @@ import java.util.List;
  * I   0   0   0   0   0   0   0   0   0
  **/
 
+/**
+ * @program: Artificial-Potential-Field-master
+ * @description: construct a map
+ * @author: Miao Jiaxin
+ * @create: 2019-12-15 23:57
+ **/
 public class Map {
     public static int DEFAULT_ROW = 10;
     public static int DEFAULT_COL = 10;
     public static Node DEFAULT_INITIAL_NODE = new Node(9, 0, 2);
     public static Node DEFAULT_FINAL_NODE = new Node(0, 9, 3);
     public static int[][] DEFAULT_BLOCK_LIST = new int[][]{{1, 2}, {2,7}, {4, 1}, {4, 4}, {6, 8}, {7, 1}, {8, 5}};
-    public List<Node> BlockList;
+
 
     public Map() {
         this.mapArea = new Node[DEFAULT_ROW][DEFAULT_COL];
